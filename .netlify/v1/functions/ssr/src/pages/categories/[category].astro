@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { categories, getCategoryBySlug } from '../../lib/categories';
+
+export function getStaticPaths() {
+  return Object.keys(categories).map(slug => ({
+    params: { category: slug }
+  }));
+}
+
+const { category } = Astro.params;
+const categoryInfo = getCategoryBySlug(category || '');
+
+if (!categoryInfo) {
+  return Astro.redirect('/404');
+}
+
+// Récupérer tous les articles
+const allArticles = await getCollection('articles');
+
+// Filtrer les articles par catégorie et s'assurer que la catégorie existe
+const articles = allArticles.filter(article => 
+  article.data.category === categoryInfo.name
+).sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Layout 
+  title={`${categoryInfo.name} - Veille IPNOT`}
+  description={categoryInfo.description}
+>
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-4xl mx-auto mb-16">
+      <h1 class="text-5xl font-bold text-primary-900 mb-6 font-playfair">
+        {categoryInfo.name}
+      </h1>
+      <p class="text-xl text-primary-800 leading-relaxed">
+        {categoryInfo.description}
+      </p>
+    </div>
+    
+    <div class="max-w-7xl mx-auto">
+      {articles.length > 0 ? (
+        <section class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {articles.map(article => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              date={article.data.date}
+              slug={article.slug}
+              source={article.data.source}
+            />
+          ))}
+        </section>
+      ) : (
+        <div class="text-center py-12 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
+          <p class="text-xl text-primary-800">Aucun article disponible dans cette catégorie.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
