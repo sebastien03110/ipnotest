@@ -1,0 +1,98 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+
+// Récupérer le terme de recherche depuis l'URL
+const query = Astro.url.searchParams.get('q')?.toLowerCase().trim() || '';
+
+// Récupérer tous les articles
+const allArticles = await getCollection('articles');
+
+// Fonction pour normaliser le texte
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .trim();
+}
+
+// Fonction de recherche améliorée
+const searchResults = allArticles.filter(article => {
+  if (!query) return false;
+  
+  const normalizedQuery = normalizeText(query);
+  const searchTerms = normalizedQuery.split(/\s+/);
+  
+  // Textes à rechercher dans l'article
+  const searchableTexts = [
+    article.data.title,
+    article.data.description,
+    article.data.category,
+    article.body
+  ].map(text => normalizeText(text || ''));
+  
+  // Vérifier si tous les termes de recherche sont présents
+  return searchTerms.every(term => 
+    searchableTexts.some(text => text.includes(term))
+  );
+});
+
+// Trier les résultats par date
+searchResults.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Layout 
+  title={`Recherche: ${query}`}
+  description={`Résultats de recherche pour "${query}"`}
+>
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-4xl mx-auto mb-16">
+      <h1 class="text-5xl font-bold text-primary-900 mb-6 font-playfair">
+        Résultats de recherche
+      </h1>
+      {query && (
+        <p class="text-xl text-primary-800 leading-relaxed">
+          {searchResults.length} résultat{searchResults.length > 1 ? 's' : ''} pour "{query}"
+        </p>
+      )}
+    </div>
+    
+    <div class="max-w-7xl mx-auto">
+      {searchResults.length > 0 ? (
+        <section class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {searchResults.map(article => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              date={article.data.date}
+              slug={article.slug}
+            />
+          ))}
+        </section>
+      ) : (
+        <div class="text-center py-12 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-8">
+          <p class="text-xl text-primary-800 mb-4">
+            Aucun résultat ne correspond à votre recherche.
+          </p>
+          <p class="text-primary-600 mb-6">
+            Suggestions :
+          </p>
+          <ul class="text-primary-700 space-y-2">
+            <li>• Vérifiez l'orthographe des mots-clés</li>
+            <li>• Essayez des mots-clés différents ou plus généraux</li>
+            <li>• Utilisez moins de mots-clés</li>
+          </ul>
+          <div class="mt-8">
+            <a href="/" class="text-accent-600 hover:text-accent-700 font-medium">
+              Retourner aux articles récents →
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>

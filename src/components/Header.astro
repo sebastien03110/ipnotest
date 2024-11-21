@@ -1,0 +1,78 @@
+---
+import SearchBar from './SearchBar.astro';
+import { categories } from '../lib/categories';
+
+const categoryLinks = Object.entries(categories).map(([slug, info]) => ({
+  name: info.name,
+  href: `/categories/${slug}`,
+  slug: slug
+}));
+---
+
+<header class="bg-white/95 backdrop-blur-sm border-b border-white/20 sticky top-0 z-50">
+  <div class="container mx-auto px-4">
+    <nav class="flex items-center justify-between h-20">
+      <a href="/" class="flex items-center gap-3 group">
+        <span class="text-2xl font-playfair font-bold text-primary-900 group-hover:text-primary-700 transition-colors">
+          Veille IPNOT
+        </span>
+      </a>
+      
+      <div class="hidden md:flex space-x-8">
+        {categoryLinks.map(link => (
+          <a 
+            href={link.href}
+            class="text-primary-800 hover:text-primary-600 font-medium transition-colors relative group"
+          >
+            {link.name}
+            <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-accent-400 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+          </a>
+        ))}
+        <a 
+          href="/about" 
+          class="text-primary-800 hover:text-primary-600 font-medium transition-colors relative group"
+        >
+          À propos
+          <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-accent-400 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <SearchBar />
+      </div>
+      
+      <button 
+        class="md:hidden p-2 hover:bg-primary-50 rounded-lg transition-colors" 
+        aria-label="Menu"
+        x-data="{ open: false }"
+        @click="open = !open"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+
+        <!-- Menu mobile -->
+        <div 
+          x-show="open" 
+          x-transition 
+          class="absolute top-full right-0 w-64 bg-white shadow-lg rounded-lg mt-2 py-2"
+        >
+          {categoryLinks.map(link => (
+            <a 
+              href={link.href}
+              class="block px-4 py-2 text-primary-800 hover:bg-primary-50"
+            >
+              {link.name}
+            </a>
+          ))}
+          <a 
+            href="/about" 
+            class="block px-4 py-2 text-primary-800 hover:bg-primary-50"
+          >
+            À propos
+          </a>
+        </div>
+      </button>
+    </nav>
+  </div>
+</header>

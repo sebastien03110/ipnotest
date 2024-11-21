@@ -1,0 +1,80 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import UpdateButton from '../components/UpdateButton.astro';
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Blog professionnel dédié au notariat et à la gestion patrimoniale" } = Astro.props;
+const siteTitle = title.includes('Veille IPNOT') ? title : `${title} - Veille IPNOT`;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="generator" content={Astro.generator} />
+    <title>{siteTitle}</title>
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen bg-gradient">
+    <div class="fixed inset-0 -z-10 background-pattern"></div>
+    <div class="fixed inset-0 -z-10 bg-gradient-radial"></div>
+    <Header />
+    <main class="container mx-auto px-4 py-12 relative">
+      <slot />
+    </main>
+    <Footer />
+    <UpdateButton />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --font-playfair: 'Playfair Display', serif;
+  }
+  
+  html {
+    font-family: var(--font-inter);
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair);
+  }
+
+  .bg-gradient {
+    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 25%, #8b5cf6 50%, #f4cd5f 75%, #cb8a0b 100%);
+  }
+
+  .background-pattern {
+    opacity: 0.1;
+    background-image: 
+      linear-gradient(45deg, #000 25%, transparent 25%),
+      linear-gradient(-45deg, #000 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #000 75%),
+      linear-gradient(-45deg, transparent 75%, #000 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+
+  .bg-gradient-radial {
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.8) 20%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0.2) 80%,
+      transparent 100%
+    );
+  }
+</style>

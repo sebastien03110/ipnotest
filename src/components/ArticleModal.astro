@@ -1,0 +1,76 @@
+---
+---
+
+<div
+  x-data="articleModal"
+  @open-article.window="openArticle($event.detail.slug)"
+  @keydown.escape.window="close"
+  x-cloak
+>
+  <div 
+    x-show="isOpen"
+    class="fixed inset-0 z-50 overflow-y-auto"
+  >
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+      <div
+        class="fixed inset-0 transition-opacity"
+        @click="close"
+      >
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+      </div>
+
+      <div
+        class="relative inline-block w-full max-w-4xl max-h-[90vh] overflow-hidden transform transition-all bg-white rounded-xl shadow-2xl"
+        @click.stop
+      >
+        <div class="absolute top-0 right-0 pt-4 pr-4">
+          <button
+            @click="close"
+            class="text-gray-400 hover:text-gray-500 focus:outline-none"
+          >
+            <span class="sr-only">Fermer</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-10 overflow-y-auto max-h-[80vh]">
+          <template x-if="content">
+            <div x-html="content"></div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  [x-cloak] { 
+    display: none !important; 
+  }
+  
+  .article-content :global(h2) {
+    @apply text-2xl font-bold mt-8 mb-4 text-primary-900;
+  }
+  
+  .article-content :global(h3) {
+    @apply text-xl font-semibold mt-6 mb-3 text-primary-800;
+  }
+  
+  .article-content :global(p) {
+    @apply mb-4 text-primary-700 leading-relaxed;
+  }
+  
+  .article-content :global(ul) {
+    @apply list-disc list-inside mb-4 text-primary-700;
+  }
+  
+  .article-content :global(ol) {
+    @apply list-decimal list-inside mb-4 text-primary-700;
+  }
+  
+  .article-content :global(a) {
+    @apply text-accent-600 hover:text-accent-700 underline;
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+interface Props {
+  category: string;
+  description: string;
+}
+
+const { category, description } = Astro.props;
+---
+
+<div class="text-center max-w-4xl mx-auto mb-16">
+  <h1 class="text-5xl font-bold text-primary-900 mb-6 font-playfair">
+    {category}
+  </h1>
+  <p class="text-xl text-primary-800 leading-relaxed">
+    {description}
+  </p>
+</div>
+
+<style>
+  .font-playfair {
+    font-family: var(--font-playfair);
+  }
+</style>

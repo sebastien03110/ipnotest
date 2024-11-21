@@ -1,0 +1,51 @@
+---
+import { categories } from '../lib/categories';
+
+const currentYear = new Date().getFullYear();
+const categoryLinks = Object.entries(categories).map(([slug, info]) => ({
+  name: info.name,
+  href: `/categories/${slug}`
+}));
+---
+
+<footer class="bg-primary-900 text-primary-100 py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-accent-400 font-playfair font-semibold text-lg mb-4">Veille IPNOT</h3>
+        <p class="text-sm">
+          L'expertise notariale au service de votre patrimoine. Des conseils et analyses pour les professionnels du notariat.
+        </p>
+      </div>
+      
+      <div>
+        <h3 class="text-accent-400 font-playfair font-semibold text-lg mb-4">Catégories</h3>
+        <ul class="space-y-2">
+          {categoryLinks.map(link => (
+            <li>
+              <a 
+                href={link.href} 
+                class="hover:text-accent-300 transition-colors"
+              >
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-accent-400 font-playfair font-semibold text-lg mb-4">Contact</h3>
+        <ul class="space-y-2">
+          <li><a href="/about" class="hover:text-accent-300 transition-colors">À propos</a></li>
+          <li><a href="/mentions-legales" class="hover:text-accent-300 transition-colors">Mentions légales</a></li>
+          <li><a href="/politique-confidentialite" class="hover:text-accent-300 transition-colors">Politique de confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="border-t border-primary-800 mt-8 pt-8 text-sm text-center">
+      <p>&copy; {currentYear} Veille IPNOT. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>

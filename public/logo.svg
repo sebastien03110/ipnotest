@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cercle de fond -->
+  <circle cx="100" cy="100" r="90" fill="url(#gradient)" />
+  
+  <!-- Symbole stylisé représentant un document/loupe -->
+  <path d="M75 60h50v10H75zM75 80h35v10H75zM75 100h25v10H75z" fill="#fff" />
+  <circle cx="120" cy="120" r="25" stroke="#fff" stroke-width="8" fill="none" />
+  <line x1="138" y1="138" x2="155" y2="155" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+  
+  <!-- Dégradé -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4c1d95" />
+      <stop offset="50%" stop-color="#6d28d9" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+</svg>
